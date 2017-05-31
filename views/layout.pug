@@ -48,6 +48,10 @@ html
                   button.flash__remove(onClick="this.parentElement.remove()") &times;
     .content
       block content
+        h1 This is the default
+
+      block footer
+        p This is a default footer
 
     block scripts
       script(src=`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_KEY}&libraries=places`)
