@@ -1,8 +1,21 @@
-## What is this?
+## Location Ops
 
-Just you wait folks!
+The web app that helps you scout locations and use it in whatever format you need back at the office.
 
-## Sample Data
+Chock full of that 'metadata' you crave.
+
+Make that movie pop with Location Ops
+
+## ToDos
+
+Make the sample data below specific to the new ops focused application with data from google maps, maybe other places as well.
+
+## ...rest of the ToDos...
+
+1) Add an image to the readme
+2) Add the Travis CLI info the kids are using to this readme
+
+### Sample Data
 
 To load sample data, run the following command in your terminal:
 
