@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title= `${title} | ${h.siteName}`
+    title= `${title || 'Welcome'} | ${h.siteName}`
     link(rel='stylesheet', href='/dist/style.css')
     link(rel="shortcut icon" type="image/png" href="/images/icons/doughnut.png")
     meta(name="viewport" content="width=device-width, initial-scale=1")
@@ -51,7 +51,9 @@ html
         h1 This is the default
 
       block footer
-        p This is a default footer
+        footer Created with 
+          span.span__emoji.span__emoji--_5em ❤️ &nbsp;
+          | by Eddie Naff
 
     block scripts
       script(src=`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_KEY}&libraries=places`)
