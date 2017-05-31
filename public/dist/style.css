@@ -1126,4 +1126,10 @@ pre.error {
   line-height: 3;
   white-space: pre-line; }
 
+footer {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 12px;
+  padding-bottom: 10px; }
+
 /*# sourceMappingURL=style.css.map*/
