@@ -25,6 +25,7 @@ locationSchema.pre('save', function (next) {
   }
   this.slug = slug(this.name);
   next();
+  // TODO make slugs more resilient so that slugs are unique
 });
 
 module.exports = mongoose.model('Location', locationSchema);

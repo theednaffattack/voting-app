@@ -1,0 +1,9 @@
+mixin locationCard(location = {})
+  .store
+    .store__hero
+      img(src=`/uploads/${location.photo || 'store.png'}`)
+      h2.title
+        a(href=`/location/${location.slug}`) #{location.name}
+    .store__details
+      // trim the card description content to 25 words
+      p= location.description.split('').slice(0, 25).join('')
