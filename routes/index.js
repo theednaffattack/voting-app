@@ -26,6 +26,8 @@ router.post('/add/:id',
   catchErrors(locationController.resize), // resize & save to disk
   catchErrors(locationController.updateLocation));
 
+router.get('/location/:slug', catchErrors(locationController.getLocationBySlug));
+
 // edit location
 router.get('/locations/:id/edit', catchErrors(locationController.editLocation));
 

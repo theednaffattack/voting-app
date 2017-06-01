@@ -76,6 +76,12 @@ exports.updateLocation = async (req, res) => {
   res.redirect(`/locations/${location._id}/edit`);
 };
 
+exports.getLocationBySlug = async (req, res, next) => {
+  const location = await Location.findOne({ slug: req.params.slug });
+  if (!location) return next();
+  res.render('location', { location, title: location.name });
+};
+
 exports.reverse = (req, res) => {
   const reverse = [...req.params.name].reverse().join('');
   res.send(reverse);
