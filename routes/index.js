@@ -15,9 +15,16 @@ router.get('/locations', locationController.getLocations);
 router.get('/add', catchErrors(locationController.addLocation));
 
 // add locations
-router.post('/add', catchErrors(locationController.createLocation));
+router.post('/add',
+  locationController.upload, // read the file into memory
+  catchErrors(locationController.resize), // resize & save to disk
+  catchErrors(locationController.createLocation)); // create location
+
 // add locations
-router.post('/add/:id', catchErrors(locationController.updateLocation));
+router.post('/add/:id',
+  locationController.upload, // read the file into memory
+  catchErrors(locationController.resize), // resize & save to disk
+  catchErrors(locationController.updateLocation));
 
 // edit location
 router.get('/locations/:id/edit', catchErrors(locationController.editLocation));

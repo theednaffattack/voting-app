@@ -34,6 +34,7 @@ const locationSchema = new mongoose.Schema({
       required: 'You must supply coordinates!',
     }],
   },
+  photo: String,
 });
 
 locationSchema.pre('save', function(next) {
