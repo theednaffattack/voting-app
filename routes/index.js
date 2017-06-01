@@ -16,8 +16,13 @@ router.get('/add', catchErrors(locationController.addLocation));
 
 // add locations
 router.post('/add', catchErrors(locationController.createLocation));
+// add locations
+router.post('/add/:id', catchErrors(locationController.updateLocation));
 
-// A dummy route that reverses the next param
+// edit location
+router.get('/locations/:id/edit', catchErrors(locationController.editLocation));
+
+// * A dummy route that reverses the next param
 router.get('/reverse/:name', locationController.reverse);
 
 module.exports = router;

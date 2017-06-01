@@ -4,5 +4,6 @@ include mixins/_locationForm
 
 block content
   .inner
+    // pre= h.dump(location)
     h2= title
-    +locationForm({ name: 'Tim Horton\'s' })
+    +locationForm(location)

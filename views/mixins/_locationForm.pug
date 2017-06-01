@@ -1,14 +1,23 @@
 mixin locationForm(location = {})
-  form(action="/add" method="POST" class="card") 
+  form(action=`/add/${location._id || ''}` method="POST" class="card") 
     //- enctype="multipart/form-data
     label(for="name") Name
-    input(type="text" name="name")
+    input(type="text" name="name" value=location.name)
     label(for="description") Description
-    textarea(name="description" rows="8")
+    textarea(name="description" rows="8")= location.description
+    //- address lng and lat
+    label(for="address") Address
+    input(type="text" id="address" name="location[address]" value=(location.location && location.location.address))
+    label(for="lng") Address Lng
+    input(type="text" id="lng" name="location[coordinates][0]" value=(location.location && location.location.coordinates[0]) required)
+    label(for="lat") Address Lat
+    input(type="text" id="lat" name="location[coordinates][1]" value=(location.location && location.location.coordinates[1]) required)
+
     - const choices = ['Wifi', 'Open Late', 'Family Friendly', 'Vegetarian', 'Licensed']
-      ul.tags
-        each choice in choices
-          .tag.tag__choice
-            input(type="checkbox" id=choice value=choice name="tags")
-            label(for=choice)= choice
+    -const tags = location.tags || []
+    ul.tags
+      each choice in choices
+        .tag.tag__choice
+          input(type="checkbox" id=choice value=choice name="tags" checked=(tags.includes(choice)))
+          label(for=choice)= choice
     input(type="submit" value="Save →" class="button")
