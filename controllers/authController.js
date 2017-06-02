@@ -44,3 +44,9 @@ exports.forgot = async (req, res) => {
   // redirect to login page
   return res.redirect('/login');
 };
+
+exports.reset = async (req, res) => {
+  // check if a user with this token exists
+  // check if that token is expired
+  res.json(req.params);
+};
