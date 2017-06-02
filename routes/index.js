@@ -1,6 +1,7 @@
 const express = require('express');
 const locationController = require('../controllers/locationController');
 const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 const { catchErrors } = require('../handlers/errorHandlers');
 
 const router = express.Router();
@@ -34,6 +35,14 @@ router.get('/tags/:tag', catchErrors(locationController.getStoresByTag));
 router.get('/reverse/:name', locationController.reverse);
 
 router.get('/login', userController.loginForm);
-router.get('/register', userController.register);
+router.get('/register', userController.registerForm);
 
+// validate the registration data
+// register the user
+// log the new user in
+router.post('/register',
+  userController.validateRegister,
+  userController.register,
+  authController.login
+);
 module.exports = router;
