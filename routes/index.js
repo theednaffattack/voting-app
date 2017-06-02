@@ -12,7 +12,7 @@ const router = express.Router();
 router.get('/', locationController.getLocations);
 router.get('/locations', locationController.getLocations);
 
-router.get('/add', catchErrors(locationController.addLocation));
+router.get('/add', authController.isLoggedIn, catchErrors(locationController.addLocation));
 
 router.post('/add',
   locationController.upload, // read the file into memory
@@ -35,6 +35,7 @@ router.get('/tags/:tag', catchErrors(locationController.getStoresByTag));
 router.get('/reverse/:name', locationController.reverse);
 
 router.get('/login', userController.loginForm);
+router.post('/login', authController.login);
 router.get('/register', userController.registerForm);
 
 // validate the registration data
@@ -45,4 +46,7 @@ router.post('/register',
   userController.register,
   authController.login
 );
+
+router.get('/logout', authController.logout);
+
 module.exports = router;
