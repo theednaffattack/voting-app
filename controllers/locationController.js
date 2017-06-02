@@ -82,6 +82,16 @@ exports.getLocationBySlug = async (req, res, next) => {
   res.render('location', { location, title: location.name });
 };
 
+exports.getStoresByTag = async (req, res) => {
+  const tag = req.params.tag;
+  const tagQuery = tag || { $exists: true };
+  const tagsPromise = Location.getTagsList();
+  const locationsPromise = Location.find({ tags: tagQuery });
+  const [tags, locations] = await Promise.all([tagsPromise, locationsPromise]);
+  // res.json(result);
+  res.render('tag', { tags, title: 'Tags', tag, locations });
+};
+
 exports.reverse = (req, res) => {
   const reverse = [...req.params.name].reverse().join('');
   res.send(reverse);

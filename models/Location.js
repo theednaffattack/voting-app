@@ -37,14 +37,29 @@ const locationSchema = new mongoose.Schema({
   photo: String,
 });
 
-locationSchema.pre('save', function(next) {
+locationSchema.pre('save', async function(next) {
   if (!this.isModified('name')) {
     next(); // skip it
     return; // stop this function from running
   }
   this.slug = slug(this.name);
+
+  // find other locations that have a slug of eddie, eddie-1, eddie-2, etc.
+  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)`, 'i');
+  const locationsWithSlug = await this.constructor.find({ slug: slugRegEx });
+  if (locationsWithSlug.length) {
+    this.slug = `${this.slug}-${locationsWithSlug.length + 1}`;
+  }
+
   next();
-  // TODO make slugs more resilient so that slugs are unique
 });
+
+locationSchema.statics.getTagsList = function() {
+  return this.aggregate([
+    { $unwind: '$tags' },
+    { $group: { _id: '$tags', count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+  ]);
+}
 
 module.exports = mongoose.model('Location', locationSchema);
