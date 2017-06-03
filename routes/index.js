@@ -59,7 +59,11 @@ router.post('/account/reset/:token',
 
 router.get('/api/v1/search', catchErrors(locationController.searchLocations));
 
-router.get('/api/v1/locations/near', catchErrors(locationController.mapStores));
+router.get('/api/v1/locations/near', catchErrors(locationController.mapLocations));
 router.get('/map', locationController.mapPage);
+
+router.post('/api/v1/locations/:id/heart', catchErrors(locationController.heartLocation));
+
+router.get('/hearts', catchErrors(locationController.getHearts));
 
 module.exports = router;

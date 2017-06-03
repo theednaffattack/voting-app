@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const jimp = require('jimp');
 const uuid = require('uuid');
+const User = mongoose.model('User');
 
 const Location = mongoose.model('Location');
 const multerOptions = {
@@ -117,7 +118,7 @@ exports.searchLocations = async (req, res) => {
   res.json(locations);
 };
 
-exports.mapStores = async (req, res) => {
+exports.mapLocations = async (req, res) => {
   // res.json({ it: 'worked' }); // test the route's functionality
 
   // 1) take the request coordinates and create an array of lat and lng
@@ -143,6 +144,25 @@ exports.mapStores = async (req, res) => {
 
 exports.mapPage = (req, res) => {
   res.render('map', { title: 'Map' });
+};
+
+exports.heartLocation = async (req, res) => {
+  // if they already have the location in their array of hearts remove it, add if they don't
+  const hearts = req.user.hearts.map(obj => obj.toString());
+  const operator = hearts.includes(req.params.id) ? '$pull' : '$addToSet';
+  const user = await User
+    .findOneAndUpdate(req.user._id,
+      { [operator]: { hearts: req.params.id }},
+      { new: true }
+      );
+  res.json(user);
+};
+
+exports.getHearts = async (req, res) => {
+  const locations = await Location.find({
+    _id: { $in: req.user.hearts }
+  });
+  res.render('locations', { title: 'Hearted Locations', locations});
 };
 
 exports.reverse = (req, res) => {

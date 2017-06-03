@@ -2,6 +2,13 @@ mixin locationCard(location = {})
   .store
     .store__hero
       .store__actions
+        if user
+          .store__action.store__action--heart
+            form.heart(method="POST" action=`/api/v1/locations/${location._id}/heart`)
+              - const heartStrings = user.hearts.map(obj => obj.toString())
+              - const heartClass = heartStrings.includes(location._id.toString()) ? 'heart__button--hearted' : ''
+              button.heart__button(type="submit" name="heart" class=heartClass)
+                != h.icon('heart')
         if user && location.author.equals(user._id)
           .store__action.store__action--edit
             a(href=`/locations/${location._id}/edit`)
