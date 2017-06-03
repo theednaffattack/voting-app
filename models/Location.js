@@ -111,4 +111,12 @@ locationSchema.virtual('reviews', {
   foreignField: 'location' // which field on the review? (it's actually pretty simple...)
 });
 
+function autopopulate(next) {
+  this.populate('reviews');
+  next();
+}
+
+locationSchema.pre('find', autopopulate);
+locationSchema.pre('findOne', autopopulate);
+
 module.exports = mongoose.model('Location', locationSchema);
