@@ -1,6 +1,11 @@
 extends layout
 
+include mixins/_reviewForm
+include mixins/_review
+
 block content
+
+  //- pre= h.dump(location)
   .single
     .single__hero
       img.single__image(src=`/uploads/${location.photo || 'store.png'}`)
@@ -10,10 +15,16 @@ block content
     img.single__map(src=h.staticMap(location.location.coordinates))
     p.single__location= location.location.address
     p= location.description
-
     if location.tags
       ul.tags
         each tag in location.tags
           li.tag
             a.tag__link(href=`/tags/${tag}`)
               span.tag__text #{tag}
+    if user
+      +reviewForm(location)
+    if location.reviews
+      .reviews
+        each review in location.reviews
+          .review
+            +review(review)

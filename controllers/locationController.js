@@ -86,7 +86,7 @@ exports.updateLocation = async (req, res) => {
 };
 
 exports.getLocationBySlug = async (req, res, next) => {
-  const location = await Location.findOne({ slug: req.params.slug }).populate('author');
+  const location = await Location.findOne({ slug: req.params.slug }).populate('author reviews');
   if (!location) return next();
   res.render('location', { location, title: location.name });
 };

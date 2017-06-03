@@ -40,6 +40,9 @@ const locationSchema = new mongoose.Schema({
     ref: 'User',
     required: 'You must supply an author'
   }
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 });
 
 locationSchema.index({
@@ -72,6 +75,12 @@ locationSchema.statics.getTagsList = function() {
     { $group: { _id: '$tags', count: { $sum: 1 } } },
     { $sort: { count: -1 } },
   ]);
-}
+};
+
+locationSchema.virtual('reviews', {
+  ref: 'Review', // which model to link?
+  localField: '_id', // which field on the location (THIS model)
+  foreignField: 'location' // which field on the review? (it's actually pretty simple...)
+});
 
 module.exports = mongoose.model('Location', locationSchema);
