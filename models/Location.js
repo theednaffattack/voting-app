@@ -47,6 +47,8 @@ locationSchema.index({
   description: 'text'
 });
 
+locationSchema.index({ location: '2dsphere' });
+
 locationSchema.pre('save', async function(next) {
   if (!this.isModified('name')) {
     next(); // skip it

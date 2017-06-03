@@ -105,8 +105,7 @@ exports.searchLocations = async (req, res) => {
   // first find stores that match
   .find({
     $text: {
-      $search: req.query.q,
-
+      $search: req.query.q
     }
   }, {
     score: { $meta: 'textScore' }
@@ -115,6 +114,30 @@ exports.searchLocations = async (req, res) => {
   .sort({
     score: { $meta: 'textScore' }
   }).limit(5);
+  res.json(locations);
+};
+
+exports.mapStores = async (req, res) => {
+  // res.json({ it: 'worked' }); // test the route's functionality
+
+  // 1) take the request coordinates and create an array of lat and lng
+  // 2) map over the array and convert the two strings as numbers
+  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+
+  // construct our mongo query
+  const query = {
+    location: {
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates
+        },
+        $maxDistance: 10000 // 10km
+      }
+    }
+  };
+  // use mongo's 'select' method to choose (and restrict) what comes back
+  const locations = await Location.find(query).select('description location name slug').limit(10);
   res.json(locations);
 };
 
