@@ -60,5 +60,6 @@ router.post('/account/reset/:token',
 router.get('/api/v1/search', catchErrors(locationController.searchLocations));
 
 router.get('/api/v1/locations/near', catchErrors(locationController.mapStores));
+router.get('/map', locationController.mapPage);
 
 module.exports = router;

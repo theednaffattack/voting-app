@@ -1,5 +1,5 @@
-const axios = require('axios');
-const dompurify = require('dompurify');
+import axios from 'axios';
+import dompurify from 'dompurify';
 
 function searchResultsHTML (locations) {
   return locations.map((location) => {

@@ -137,8 +137,12 @@ exports.mapStores = async (req, res) => {
     }
   };
   // use mongo's 'select' method to choose (and restrict) what comes back
-  const locations = await Location.find(query).select('description location name slug').limit(10);
+  const locations = await Location.find(query).select('description location name slug photo').limit(10);
   res.json(locations);
+};
+
+exports.mapPage = (req, res) => {
+  res.render('map', { title: 'Map' });
 };
 
 exports.reverse = (req, res) => {
