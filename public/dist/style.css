@@ -1126,6 +1126,9 @@ pre.error {
   line-height: 3;
   white-space: pre-line; }
 
+.hl {
+  background-color: yellow; }
+
 footer {
   padding-left: 20px;
   padding-right: 20px;

@@ -43,6 +43,7 @@ exports.resize = async (req, res, next) => {
 };
 
 exports.createLocation = async (req, res) => {
+  req.body.author = req.user._id;
   const location = new Location(req.body);
   await location.save();
   req.flash('success', `Successfully added <strong>${location.name}!</strong>`);
@@ -55,10 +56,17 @@ exports.getLocations = async (req, res) => {
   res.render('locations', { title: 'Locations', locations });
 };
 
+const confirmOwner = (location, user) => {
+  if (!location.author.equals(user._id)) {
+    throw Error('You must own a location in order to edit!');
+  }
+};
+
 exports.editLocation = async (req, res) => {
   // 1. Find the store given the ID
   const location = await Location.findOne({ _id: req.params.id });
   // 2. TODO confirm they are the owner of the store
+  confirmOwner(location, req.user);
   // 3. Render out the edit form so the user can update their store
   res.render('editLocation', { title: `Edit ${location.name}`, location });
 };
@@ -77,7 +85,7 @@ exports.updateLocation = async (req, res) => {
 };
 
 exports.getLocationBySlug = async (req, res, next) => {
-  const location = await Location.findOne({ slug: req.params.slug });
+  const location = await Location.findOne({ slug: req.params.slug }).populate('author');
   if (!location) return next();
   res.render('location', { location, title: location.name });
 };
@@ -90,6 +98,24 @@ exports.getStoresByTag = async (req, res) => {
   const [tags, locations] = await Promise.all([tagsPromise, locationsPromise]);
   // res.json(result);
   res.render('tag', { tags, title: 'Tags', tag, locations });
+};
+
+exports.searchLocations = async (req, res) => {
+  const locations = await Location
+  // first find stores that match
+  .find({
+    $text: {
+      $search: req.query.q,
+
+    }
+  }, {
+    score: { $meta: 'textScore' }
+  })
+  // then sort them
+  .sort({
+    score: { $meta: 'textScore' }
+  }).limit(5);
+  res.json(locations);
 };
 
 exports.reverse = (req, res) => {

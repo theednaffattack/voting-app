@@ -18,10 +18,6 @@ html(lang="en")
                 a.nav__link(href=item.slug, class=(currentPath.startsWith(item.slug) ? 'nav__link--active' : ''))
                   != h.icon(item.icon)
                   span #{item.title}
-          .nav__section.nav__section--search
-            .search
-              input.search__input(type="text" placeholder="Coffee, beer..." name="search")
-              .search__results
           .nav__section.nav__section--user
             if user
               li.nav__item: a.nav__link(href="/hearts", class=(currentPath.startsWith('/hearts') ? 'nav__link--active' : ''))
@@ -36,6 +32,11 @@ html(lang="en")
             else
               li.nav__item: a.nav__link(href="/register", class=(currentPath.startsWith('/register') ? 'nav__link--active' : '')) Register
               li.nav__item: a.nav__link(href="/login", class=(currentPath.startsWith('/login') ? 'nav__link--active' : '')) Log In
+
+        .nav.nav__section.nav__section--search
+          .search
+            input.search__input(type="text" placeholder="Coffee, beer..." name="search")
+            .search__results
 
     block messages
       if locals.flashes

@@ -24,7 +24,7 @@ router.post('/add/:id',
   catchErrors(locationController.resize), // resize & save to disk
   catchErrors(locationController.updateLocation));
 
-router.get('/locations/:id/edit', catchErrors(locationController.editLocation));
+router.get('/locations/:id/edit', authController.isLoggedIn, catchErrors(locationController.editLocation));
 
 router.get('/location/:slug', catchErrors(locationController.getLocationBySlug));
 
@@ -56,5 +56,7 @@ router.get('/account/reset/:token', catchErrors(authController.reset));
 router.post('/account/reset/:token',
   authController.confirmedPasswords,
   catchErrors(authController.update));
+
+router.get('/api/v1/search', catchErrors(locationController.searchLocations));
 
 module.exports = router;

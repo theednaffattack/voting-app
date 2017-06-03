@@ -2,9 +2,10 @@ mixin locationCard(location = {})
   .store
     .store__hero
       .store__actions
-        .store__action.store__action--edit
-          a(href=`/locations/${location._id}/edit`)
-            != h.icon('pencil')
+        if user && location.author.equals(user._id)
+          .store__action.store__action--edit
+            a(href=`/locations/${location._id}/edit`)
+              != h.icon('pencil')
       img(src=`/uploads/${location.photo || 'store.png'}`)
       h2.title
         a(href=`/location/${location.slug}`) #{location.name}
