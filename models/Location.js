@@ -77,6 +77,34 @@ locationSchema.statics.getTagsList = function() {
   ]);
 };
 
+locationSchema.statics.getTopLocations = function () {
+  return this.aggregate([
+    // lookup locations and populate their reviews
+    { $lookup: {
+      from: 'reviews', // confusing. Mongo lowercases and puts an 's' on the end of your model FOR YOU
+      localField: '_id', // which field on the location (THIS model)
+      foreignField: 'location', // which field on the review? (it's actually pretty simple...)
+      as: 'reviews' } // what the field is going to be called
+    }, // filter for only items that have 2 or more reviews
+    {
+      $match: { 'reviews.1': { $exists: true } }
+    },
+    
+    // add the average reviews field
+    { $project: {
+      photo: '$$ROOT.photo',
+      name: '$$ROOT.name',
+      reviews: '$$ROOT.reviews',
+      slug: '$$ROOT.slug',
+      averageRating: { $avg: '$reviews.rating' }
+    } },
+    // sort it by our new field, highest reviews first
+    { $sort: { averageRating: -1 } },
+    // limit to at most 10 items
+    { $limit: 10 }
+  ]);
+};
+
 locationSchema.virtual('reviews', {
   ref: 'Review', // which model to link?
   localField: '_id', // which field on the location (THIS model)

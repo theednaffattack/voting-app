@@ -165,6 +165,12 @@ exports.getHearts = async (req, res) => {
   res.render('locations', { title: 'Hearted Locations', locations});
 };
 
+exports.getTopLocations = async (req, res) => {
+  const locations = await Location.getTopLocations();
+  res.render('topLocations', { title: '⭐️ Top Locations!', locations });
+  // res.json(locations);
+};
+
 exports.reverse = (req, res) => {
   const reverse = [...req.params.name].reverse().join('');
   res.send(reverse);

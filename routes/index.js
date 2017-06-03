@@ -78,5 +78,7 @@ router.post('/api/v1/locations/:id/heart', catchErrors(locationController.heartL
 
 router.get('/hearts', catchErrors(locationController.getHearts));
 
+router.get('/top', catchErrors(locationController.getTopLocations));
+
 
 module.exports = router;

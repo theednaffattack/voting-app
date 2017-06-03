@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .inner
+    h2 Top #{locations.length} Locations
+    table.table
+      thead
+        td photo
+        td ranking
+        td name
+        td reviews
+        td Average Rating
+      each location, i in locations
+        tr
+          td
+            a(href=`/location/${location.slug}`)
+              img(width=200 src=`/uploads/${location.photo || 'location.png'}` alt="location.name")
+          td #{i + 1}
+          td: a(href=`/location/${location.slug}`)= location.name
+          td= location.reviews.length
+          td #{Math.round(location.averageRating * 10) / 10} / 5
