@@ -1,11 +1,18 @@
 const express = require("express");
+const apolloExpressServer = require("apollo-server-express");
+const graphiql = require("express-graphiql");
+
 const locationController = require("../controllers/locationController");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const reviewController = require("../controllers/reviewController");
+const graphqlController = require("../controllers/graphqlController");
 const { catchErrors } = require("../handlers/errorHandlers");
+const schema = require("../graphql_modules/schema");
 
 const router = express.Router();
+
+const { graphqlExpress, graphiqlExpress } = apolloExpressServer;
 
 // Ye olde entry point
 // router.get('/', locationController.homePage);
@@ -51,7 +58,18 @@ router.get("/tags/:tag", catchErrors(locationController.getStoresByTag));
 router.get("/reverse/:name", locationController.reverse);
 
 router.get("/login", userController.loginForm);
-router.post("/login", authController.login);
+router.post("/login", authController.login, (req, res) => {
+  // if (req.user.isAdmin === true) {
+  //   res.redirect("/admin/gifts?filter=review");
+  // }
+  // if (req.user.isAdmin === false) {
+  //   res.redirect("/dashboard/received");
+  // }
+  req.flash("You are now loggeed in! 👍🏾");
+  res.redirect(req.session.returnTo || "/");
+
+  delete req.session.returnTo;
+});
 router.get("/register", userController.registerForm);
 
 // validate the registration data
@@ -102,5 +120,30 @@ router.post(
 router.get("/hearts", catchErrors(locationController.getHearts));
 
 router.get("/top", catchErrors(locationController.getTopLocations));
+
+/** GRAPHQL PART OF API */
+// router.get(
+//   "/graphql",
+//   authController.isLoggedIn,
+//   catchErrors(graphqlController.graphEndpoint)
+// );
+
+// router.post("/graphql", graphqlExpress({ schema }));
+
+router.use(
+  "/api/v2",
+  graphqlExpress({
+    schema,
+    debug: true
+  })
+);
+
+router.use(
+  "/explore",
+  authController.isLoggedIn,
+  graphiqlExpress({
+    endpointURL: "/api/v2"
+  })
+);
 
 module.exports = router;
